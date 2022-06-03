@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { onKeyPress, useDark, useHideScroll, useWindowSize } from '../composables'
+import { ref, watch } from 'vue'
+import { onKeyPress, useClickOutside, useDark, useHideScroll, useWindowSize } from '../composables'
 
 const { isDark, setDark } = useDark()
 // html body must have 0 margin
@@ -16,6 +16,21 @@ keyPress('a', (e) => {
 
 keyPress(['b', 'c'], () => {
   showCode.value = !showCode.value
+})
+
+const showModal = ref(false)
+const modalRef = ref()
+
+useClickOutside(modalRef, () => {
+  if (showModal.value)
+    showModal.value = false
+})
+
+watch(showModal, () => {
+  if (showModal.value)
+    hideScroll()
+  else
+    showScroll()
 })
 
 const { isWindowSize, width, height } = useWindowSize()
@@ -66,7 +81,6 @@ const { isWindowSize, width, height } = useWindowSize()
           </button>
         </div>
       </div>
-
       <div class="p-4">
         <div>
           Width: {{ width }}
@@ -84,6 +98,25 @@ const { isWindowSize, width, height } = useWindowSize()
           isWindowSize &lt; lg: {{ isWindowSize('<', 'lg') }}
         </div>
       </div>
+
+      <div class="p-4">
+        useClickOutside
+        <div class="pt-2">
+          <button class="btn" @click="showModal = true">
+            ShowModal
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div v-if="showModal" class="flex justify-center items-center fixed z-90 inset-0 h-screen w-screen bg-black/30">
+    <div ref="modalRef" class="modal">
+      Modal
+      <div class="flex w-full justify-end">
+        <button class="btn" @click="showModal = false">
+          Close
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -92,6 +125,9 @@ const { isWindowSize, width, height } = useWindowSize()
 html {
   @apply bg-[#ECEFF4] text-[#4C566A];
 }
+.dark {
+  @apply bg-[#2E3440] text-[#ECEFF4];
+}
 .code {
   @apply bg-[#E5E9F0] min-h-10 rounded p-2 dark:bg-[#4C566A];
 }
@@ -99,7 +135,9 @@ html {
 .btn {
   @apply bg-[#88C0D0] bg-opacity-90 hover:bg-[#88C0D0]  text-[#3B4252] font-medium p-2 rounded-md;
 }
-.dark {
-  @apply bg-[#2E3440] text-[#ECEFF4];
+
+.modal {
+  @apply bg-[#ECEFF4] text-[#4C566A] w-100  rounded-lg p-4;
+
 }
 </style>

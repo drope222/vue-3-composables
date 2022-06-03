@@ -109,9 +109,13 @@ const { isWindowSize, width, height } = useWindowSize()
       </div>
     </div>
   </div>
-  <div v-if="showModal" class="flex justify-center items-center fixed z-90 inset-0 h-screen w-screen bg-black/30">
-    <div ref="modalRef" class="modal">
-      Modal
+  <div v-if="showModal" class="modal">
+    <div class="backdrop" />
+    <div ref="modalRef" class="modal-box">
+      <div class="pb-4">
+        Modal
+      </div>
+
       <div class="flex w-full justify-end">
         <button class="btn" @click="showModal = false">
           Close
@@ -131,13 +135,16 @@ html {
 .code {
   @apply bg-[#E5E9F0] min-h-10 rounded p-2 dark:bg-[#4C566A];
 }
-
 .btn {
   @apply bg-[#88C0D0] bg-opacity-90 hover:bg-[#88C0D0]  text-[#3B4252] font-medium p-2 rounded-md;
 }
-
 .modal {
-  @apply bg-[#ECEFF4] text-[#4C566A] w-100  rounded-lg p-4;
-
+  @apply flex justify-center items-center fixed z-20 inset-0 h-screen w-screen
+}
+.modal-box {
+  @apply z-30 bg-[#ECEFF4] w-100 rounded-lg p-4 dark:bg-[#2E3440] m-4;
+}
+.backdrop {
+  @apply fixed w-full h-full bg-black/30;
 }
 </style>

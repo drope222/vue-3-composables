@@ -1,6 +1,6 @@
 import { onMounted, ref } from 'vue'
 
-const isDark = ref<boolean>(true)
+const isDark = ref<boolean>(false)
 
 function useDark() {
   onMounted(() => {
